@@ -2,15 +2,14 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import logo from "/public/images/logo.png"
 import { useState } from "react"
 import { useRouter } from 'next/navigation'
-import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input";
 
 // import PocketBase from "pocketbase"
 // const pb = new PocketBase('http://57.128.223.203:8090');
-import pb from "@/src/lib/pb";
+import pb from "@/lib/pb";
 
 export default function Login() {
 
@@ -28,9 +27,8 @@ export default function Login() {
       console.log("User logged in:", authData);
       pb.authStore.save(authData.token, authData.record);
 
-      // You don't need to store anything manually — pb.authStore handles session
       alert("Login successful!");
-      router.push("/"); // Or wherever you want to redirect after login
+      router.push("/Quiz"); 
 
     } catch (err) {
       //console.error("Login failed:", err);
@@ -42,10 +40,11 @@ export default function Login() {
     return(
         <div className="m-0 w-full h-screen bg-cover bg-center bg-white flex flex-row">
 
-            <main className="w-[40%] h-screen bg-black/80 flex flex-col justify-center pb-[5%]" >
+            <main className="w-[40%] h-screen bg-zinc-700 flex flex-col justify-center pb-[5%]" >
+            
 
             <form onSubmit={handleLogin} className="flex items-center flex-col space-y-6">
-
+            <h1 className="text-white font-mono font-bold text-2xl">SIGN IN</h1>
             {error && <p className="text-red-500 text-center">{error}</p>}
 
             <Input
@@ -69,7 +68,7 @@ export default function Login() {
             required
             />
 
-            <Button type="submit" className="bg-button-grey hover:bg-black w-[30%] border border-white cursor-pointer">Login</Button>
+            <Button type="submit" className="bg-button-grey hover:bg-zinc-800 w-[30%] border border-white cursor-pointer">Login</Button>
             </form>
 
             </main>
@@ -79,8 +78,8 @@ export default function Login() {
                 <h1 className="text-white text-9xl italic">Progress Improvement</h1>
             </aside>
 
-            <div className="absolute top-[5%] right-[5%]">
-              <Button className="bg-custom-blue hover:bg-custom-blue-100 cursor-pointer"><Link href="/">Go back</Link></Button>
+            <div className="absolute bottom-[5%] left-[5%]">
+              <Button className="bg-zinc-600 hover:bg-zinc-800 cursor-pointer"><Link href="/">Sign up</Link></Button>
             </div>
            
         </div>
