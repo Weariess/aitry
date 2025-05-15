@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "../context/AuthContext"
 import { useEffect } from "react";
 import { LogOut } from 'lucide-react';
+import pb from "@/lib/pb";
+import webhook from "@/lib/webhook"
 
 export default function Home() {
   const { user, logout, loading } = useAuth();
@@ -18,6 +20,7 @@ export default function Home() {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [questionCount, setQuestionCount] = useState(0);
   const [score, setScore] = useState(0);
+  const [quizHistory, setQuizHistory] = useState([])
 
   useEffect(() => {
     if (!loading && !user) {
@@ -28,44 +31,77 @@ export default function Home() {
   if (loading) return <div className="m-0 w-full h-screen bg-cover bg-center bg-white flex items-center justify-center text-9xl text-white/50"><p>Loading...</p></div>;
   if (!user) return null;
 
+  const saveFullQuiz = async () => {
+    try {
+      if (!pb || !user || quizHistory.length === 0) return
+      
+      const data = {
+        user: user.id,
+        topic: input,
+        score: score,
+        total_questions: 10,
+        responses: quizHistory // All questions with user answers
+      }
+
+      await pb.collection('pytania').create(data)
+      console.log('Full quiz saved to PocketBase')
+    } catch (err) {
+      console.error('Error saving quiz:', err)
+    }
+  }
+
   const onfirst = async () => {
     try {
       if (questionCount >= 10) {
-        // Reset quiz after 10 questions
-        setQuestionCount(0);
-        setScore(0);
-        setDane(null);
-        return;
+        await saveFullQuiz() // Save all data at quiz end
+        setQuizHistory([]) // Clear history
+        setQuestionCount(0)
+        setScore(0)
+        setDane(null)
+        return
       }
 
-      setSelectedAnswer(null);
-      const data = await fetch('http://192.168.15.34:5678/webhook/question', {
+      setSelectedAnswer(null)
+      const data = await fetch(webhook, {
         headers: { "topic": `${input}` }
-      });
-      const json = await data.json();
-      setDane(json[0].output);
-      setQuestionCount(prev => prev + 1);
+      })
+      const json = await data.json()
+      setDane(json[0].output)
+      setQuestionCount(prev => prev + 1)
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
-
-  const handleChange = (event) => {
-    setInput(event.target.value);
-  };
+  }
 
   const handleAnswerClick = (answerId) => {
     if (selectedAnswer === null) {
-      setSelectedAnswer(answerId);
-      if (answerId === dane.correct) {
-        setScore(prev => prev + 1);
-      }
+      setSelectedAnswer(answerId)
+      const isCorrect = answerId === dane.correct
+      if (isCorrect) setScore(prev => prev + 1)
+
+      // Store question data in history
+      setQuizHistory(prev => [
+        ...prev,
+        {
+          question: dane.question,
+          answers: dane.answers,
+          correct_answer: dane.correct,
+          user_answer: answerId,
+          is_correct: isCorrect,
+          question_number: questionCount
+        }
+      ])
     }
+  }
+
+   const handleChange = (event) => {
+    setInput(event.target.value);
   };
 
   return (
     <div className="m-0 w-full h-screen bg-cover bg-center bg-white flex flex-row">
       <main className="w-[40%] h-screen bg-zinc-700 flex flex-col justify-center text-center pb-[5%] gap-5" >
+        <h1 className="text-white font-mono font-bold absolute left-[1%] top-[1%]">Welcome {user.username}</h1>
         <h1 className="text-white font-mono font-bold text-2xl">TYPE A TOPIC OF YOUR QUIZ</h1>
         <Input
           className="w-[70%] self-center"
@@ -81,6 +117,9 @@ export default function Home() {
         <button className="bg-zinc-500 rounded-full w-20 h-20 flex items-center justify-center absolute left-[3%] bottom-[3%] cursor-pointer hover:bg-zinc-600">
           <LogOut onClick={logout} className="w-[80%] h-[80%] stroke-[1.5]"></LogOut>
         </button>
+        <div className="absolute right-[2%] bottom-[5%]">
+              <Button className="bg-zinc-600 hover:bg-zinc-800 cursor-pointer"><Link href="/history">Your history</Link></Button>
+            </div>
       </main>
 
       <aside className="w-[60%] h-screen p-4 overflow-auto">
@@ -143,7 +182,11 @@ export default function Home() {
             <Button onClick={onfirst}>Next Question</Button>
           </div>
         )}
+
+
+         
       </aside>
+        
     </div>
   )
 }
