@@ -7,8 +7,6 @@ import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input";
 
-// import PocketBase from "pocketbase"
-// const pb = new PocketBase('http://57.128.223.203:8090');
 import pb from "@/lib/pb";
 
 export default function Login() {
