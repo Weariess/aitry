@@ -74,8 +74,6 @@ export default function Login() {
             </main>
 
             <aside className="w-[60%] h-screen flex flex-col pl-3">
-                <h1 className="text-white text-9xl italic">Growth</h1>
-                <h1 className="text-white text-9xl italic">Progress Improvement</h1>
             </aside>
 
             <div className="absolute bottom-[5%] left-[5%]">
