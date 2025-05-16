@@ -71,7 +71,10 @@ export default function Login() {
 
             </main>
 
-            <aside className="w-[60%] h-screen flex flex-col pl-3">
+            <aside className="w-[60%] h-screen flex flex-col pl-3 justify-center">
+              <h1 className="font-bold font-mono text-7xl text-zinc-600 self-center align-middle">
+              Welcome to Quizzes!
+              </h1>
             </aside>
 
             <div className="absolute bottom-[5%] left-[5%]">

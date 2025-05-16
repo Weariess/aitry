@@ -6,6 +6,7 @@ import { useState } from "react"
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { WavyBackground } from "@/components/ui/wavy-background";
 
 import pb from "@/lib/pb";
 
@@ -51,7 +52,9 @@ export default function Register() {
       };
 
     return(
+      
         <div className="m-0 w-full h-screen bg-cover bg-center bg-white flex flex-row">
+       
 
             <main className="w-[40%] h-screen bg-zinc-700 flex flex-col justify-center" >
             
@@ -102,8 +105,10 @@ export default function Register() {
 
             </main>
 
-            <aside className="w-[60%] h-screen flex flex-col pl-3">
+            <aside className="w-[60%] h-screen flex flex-col pl-3 justify-center">
+              <h1 className="font-bold font-mono text-7xl text-zinc-600 self-center align-middle">
               Welcome to Quizzes!
+              </h1>
             </aside>
 
             <div className="absolute bottom-[5%] left-[5%]">
@@ -113,3 +118,4 @@ export default function Register() {
         </div>
     )
 }
+
