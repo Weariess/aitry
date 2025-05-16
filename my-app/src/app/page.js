@@ -57,7 +57,7 @@ export default function Register() {
             
 
             <form onSubmit={handleSubmit} className="flex items-center flex-col space-y-5">
-            <h1 className="text-white font-mono font-bold text-2xl">WELCOME</h1>
+            <h1 className="text-white font-mono font-bold text-2xl">SIGN UP</h1>
             <Input
             className="text-white w-[65%] bg-button-grey"
             type="text"
@@ -103,6 +103,7 @@ export default function Register() {
             </main>
 
             <aside className="w-[60%] h-screen flex flex-col pl-3">
+              Welcome to Quizzes!
             </aside>
 
             <div className="absolute bottom-[5%] left-[5%]">
