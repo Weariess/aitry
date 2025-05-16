@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { LogOut } from 'lucide-react';
 import pb from "@/lib/pb";
 import webhook from "@/lib/webhook"
+import { AnimatedCircularProgressBar } from "@/components/magicui/animated-circular-progress-bar";
 
 export default function Home() {
   const { user, logout, loading } = useAuth();
@@ -21,6 +22,7 @@ export default function Home() {
   const [questionCount, setQuestionCount] = useState(0);
   const [score, setScore] = useState(0);
   const [quizHistory, setQuizHistory] = useState([])
+
 
   useEffect(() => {
     if (!loading && !user) {
@@ -124,7 +126,8 @@ export default function Home() {
 
       <aside className="w-[60%] h-screen p-4 overflow-auto">
         {/* Progress Bar */}
-        <div className="mb-6">
+
+        {/* <div className="mb-6">
           <div className="flex justify-between mb-1">
             <span className="text-sm font-medium">Question {Math.min(questionCount, 10)}/10</span>
             <span className="text-sm font-medium">Score: {score}/10</span>
@@ -135,7 +138,28 @@ export default function Home() {
               style={{ width: `${(questionCount / 10) * 100}%` }}
             ></div>
           </div>
+        </div> */}
+    <div className="flex flex-row justify-evenly">
+       <div className=" text-4xl font-bold font-mono text-gray-700 self-center">Your score: {score}</div>
+
+        <div className="mb-6 mt-2 flex flex-col items-center">
+            <AnimatedCircularProgressBar
+            value={questionCount}
+            max={10}
+            gaugePrimaryColor="#707070"
+            gaugeSecondaryColor="#E5E7EB"
+            className="w-70 h-70"
+            showPercentage={false} // Add this prop if available
+            displayValue={questionCount} // Force it to show raw value
+            />
+            <div className="mt-2 text-sm text-gray-700">
+              Question {Math.min(questionCount, 10)} / 10
+            </div>
+
         </div>
+    </div>
+
+    
 
         {questionCount >= 10 ? (
           <div className="text-center mt-10">
