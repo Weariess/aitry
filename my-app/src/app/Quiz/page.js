@@ -149,8 +149,8 @@ export default function Home() {
             gaugePrimaryColor="#707070"
             gaugeSecondaryColor="#E5E7EB"
             className="w-70 h-70"
-            showPercentage={false} // Add this prop if available
-            displayValue={questionCount} // Force it to show raw value
+            showPercentage={false} 
+            displayValue={questionCount} 
             />
             <div className="mt-2 text-sm text-gray-700">
               Question {Math.min(questionCount, 10)} / 10
